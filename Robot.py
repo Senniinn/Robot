@@ -1,5 +1,6 @@
 # class d'un robot de base
 import random
+import time
 
 
 class Robot():
@@ -31,6 +32,7 @@ class Robot():
 
             #print("\nL'attage de " + self.nom + " a infliger " + str(degats) + " points de dégats")
             #print("Il reste " + str(robot.sante) + " points de vie à " + robot.nom)
+            #time.sleep(1)
 
     def gagnerExperience(self, montant):
         if self.lvl == 1:
@@ -44,7 +46,6 @@ class Equipe():
     def __init__(self, nom, robots):
         self.nom = nom
         self.equipe = []
-
         for robot in robots:
             self.equipe.append(robot)
 
@@ -79,13 +80,18 @@ class Equipe():
             else:
                 print("Le robot " + robot.nom + " (lvl " + str(robot.lvl) + ") a : " + str(robot.sante) + " HP.")
 
+
 class Partie():
-    def __init__(self):
-        print("Duel entre le joueur 1 et le joueur 2: Combats de 4 robots dans chaque équpie !")
-        nomEquipe1 = input("Joueur 1: choisir le nom de ton équipe :")
-        self.equipe1 = self.creerEquipe(nomEquipe1)
-        nomEquipe2 = input("Joueur 2: choisir le nom de ton équipe :")
-        self.equipe2 = self.creerEquipe(nomEquipe2)
+    def __init__(self, test = False):
+        if test:
+            self.equipe1 = Equipe("FullSoldat", [RobotSoldat("un"), RobotSoldat("un"), RobotHybride("un"), RobotSoldat("un")])
+            self.equipe2 = Equipe("healer", [RobotSoldat("deux"), RobotSoldat("deux"), RobotHybride("deux"), RobotMedecin("deux")])
+        else:
+            print("Duel entre le joueur 1 et le joueur 2: Combats de 4 robots dans chaque équpie !")
+            nomEquipe1 = input("Joueur 1: choisir le nom de ton équipe :")
+            self.equipe1 = self.creerEquipe(nomEquipe1)
+            nomEquipe2 = input("Joueur 2: choisir le nom de ton équipe :")
+            self.equipe2 = self.creerEquipe(nomEquipe2)
 
     def creerEquipe(self, nom):
         equipe = []
@@ -93,9 +99,9 @@ class Partie():
             nomRobot = input("Créer un robot, renseigne lui son nom :")
             print("Joueur 1, Renseigne le type de robot que tu veux :")
             typeRobot = input("1 = Robot soldat | 2 = Robot médecin | 3 = Robot hybride")
-            if (typeRobot == 1):
+            if (typeRobot == "1"):
                 equipe.append(RobotSoldat(nomRobot))
-            elif (typeRobot == 2):
+            elif (typeRobot == "2"):
                 equipe.append(RobotMedecin(nomRobot))
 
         return Equipe(nom, equipe)
@@ -107,50 +113,55 @@ class Partie():
             return Equipe(nom, [RobotSoldat("Stravinsky"), RobotSoldat("Ramuz"), RobotMedecin("Olivier Mauvais")])
 
     def jouerTour(self):
-        commencer = random.randint(0,1)
+        commencer = random.randint(0, 1)
         while len(self.equipe1.membreVivant()) > 0 and len(self.equipe2.membreVivant()) > 0:
-            for i in range(3):
+            for robotIndex in range(len(self.equipe1.equipe)):
                 if commencer == 0:
-                    self.tour(self.equipe1.equipe, self.equipe2, i)
+                    self.tour(self.equipe1.equipe, self.equipe2, robotIndex)
                     if len(self.equipe1.membreVivant()) > 0 and len(self.equipe2.membreVivant()) > 0:
-                        self. tour(self.equipe2.equipe, self.equipe1, i)
+                        self.tour(self.equipe2.equipe, self.equipe1, robotIndex)
                     else:
                         break
                 else:
-                    self.tour(self.equipe2.equipe, self.equipe1, i)
+                    self.tour(self.equipe2.equipe, self.equipe1, robotIndex)
                     if len(self.equipe1.membreVivant()) > 0 and len(self.equipe2.membreVivant()) > 0:
-                        self.tour(self.equipe1.equipe, self.equipe2, i)
+                        self.tour(self.equipe1.equipe, self.equipe2, robotIndex)
                     else:
                         break
 
-            #self.equipe1.afficherHp()
-            #self.equipe2.afficherHp()
-            #input("Tour :  Appuyer sur une touche pour continuer ...")
-
-        if len(self.equipe1.membreVivant()) > 0:
-            print("\nL'equipe " + self.equipe1.nom + " a gagné\n")
-            #self.equipe1.afficherHp()
-            return 1
-        else:
-            print("\nL'equipe " + self.equipe2.nom + " a gagné\n")
-            #self.equipe2.afficherHp()
-            return 2
+        return self.afficherVictoire()
 
     def tour(self, equipeAllie, equipeEnemie, index):
-        if equipeAllie[index].__class__.__name__ == "RobotSoldat":
+        if(equipeAllie[index].__class__.__name__ == "RobotHybride"):
+            equipeAllie[index].action(equipeAllie, equipeEnemie)
+        elif equipeAllie[index].__class__.__name__ == "RobotSoldat":
             equipeAllie[index].attaquer(equipeEnemie.randRobot())
         else:
             equipeAllie[index].soigner(equipeAllie)
 
+    def afficherVictoire(self):
+        if len(self.equipe1.membreVivant()) > 0:
+            #print("\nL'equipe " + self.equipe1.nom + " a gagné\n")
+            #self.equipe1.afficherHp()
+            #self.equipe2.afficherHp()
+            return 1
+        else:
+            #print("\nL'equipe " + self.equipe2.nom + " a gagné\n")
+            #self.equipe1.afficherHp()
+            #self.equipe2.afficherHp()
+            return 2
+
+
 class RobotMedecin(Robot):
     def __init__(self, nom, sante=70, competence="soigner"):
         Robot.__init__(self, nom, sante, competence)
-        self.tauxSoin = 15
+        self.tauxSoin = 45
         self.maxHp = 70
 
     def soigner(self, monEquipe):
         if (self.sante == 0):
-            print(self.nom + " est mort")
+            pass
+            #print(self.nom + " est mort")
         else:
             robotMinHp = None
             minHp = 100
@@ -172,18 +183,34 @@ class RobotMedecin(Robot):
 
                 self.gagnerExperience(5)
 
-                print("\n" + robotMinHp.nom + " a regagné " + str(robotMinHp.sante - minHp) + " points de vie")
+                #print("\n" + robotMinHp.nom + " a regagné " + str(robotMinHp.sante - minHp) + " points de vie")
+                #time.sleep(1)
 
 
 class RobotSoldat(Robot):
     def __init__(self, nom, sante=100, competence="attaquer"):
         Robot.__init__(self, nom, sante, competence)
-        self.tauxAttaque = 30
+        self.tauxAttaque = 25
+
+
+class RobotHybride(RobotMedecin):
+    def __init__(self, nom, sante=100, competence="hybride"):
+        RobotMedecin.__init__(self, nom, sante, competence)
+        self.maxHp = 100
+        self.tauxAttaque = 25
+        self.tauxSoin = 30
+
+    def action(self, equipeAllie, equipeEnemie):
+        rand = random.randint(0, 1)
+        if rand == 0:
+            self.attaquer(equipeEnemie.randRobot())
+        else:
+            self.soigner(equipeAllie)
 
 stat = 0
 total = 0
-for i in range(100):
-    p = Partie()
+for i in range(15000):
+    p = Partie(True)
     result = p.jouerTour()
     if result == 1:
         stat += 1
