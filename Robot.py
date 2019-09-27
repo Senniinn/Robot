@@ -84,8 +84,8 @@ class Equipe():
 class Partie():
     def __init__(self, test = False):
         if test:
-            self.equipe1 = Equipe("FullSoldat", [RobotSoldat("un"), RobotSoldat("un"), RobotHybride("un"), RobotSoldat("un")])
-            self.equipe2 = Equipe("healer", [RobotSoldat("deux"), RobotSoldat("deux"), RobotHybride("deux"), RobotMedecin("deux")])
+            self.equipe1 = Equipe("FullSoldat", [RobotSoldat("un"), RobotSoldat("un"), RobotHybride("un"), RobotMedecin("un")])
+            self.equipe2 = Equipe("healer", [RobotSoldat("deux"), RobotSoldat("deux"), RobotSoldat("deux"), RobotHybride("deux")])
         else:
             print("Duel entre le joueur 1 et le joueur 2: Combats de 4 robots dans chaque équpie !")
             nomEquipe1 = input("Joueur 1: choisir le nom de ton équipe :")
@@ -153,10 +153,10 @@ class Partie():
 
 
 class RobotMedecin(Robot):
-    def __init__(self, nom, sante=70, competence="soigner"):
+    def __init__(self, nom, sante=90, competence="soigner"):
         Robot.__init__(self, nom, sante, competence)
         self.tauxSoin = 45
-        self.maxHp = 70
+        self.maxHp = 90
 
     def soigner(self, monEquipe):
         if (self.sante == 0):
@@ -198,7 +198,7 @@ class RobotHybride(RobotMedecin):
         RobotMedecin.__init__(self, nom, sante, competence)
         self.maxHp = 100
         self.tauxAttaque = 25
-        self.tauxSoin = 30
+        self.tauxSoin = 20
 
     def action(self, equipeAllie, equipeEnemie):
         rand = random.randint(0, 1)
