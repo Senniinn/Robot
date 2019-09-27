@@ -2,7 +2,9 @@
 import random
 import time
 
-
+#Class Robot : Chaque robot aura un nom, de la santé, une compétence qui est sa description, un niveau d'attaque
+#Chaque robot aura une chance de faire un coup critique
+#Système d'expérience a chaque coup et quand un robot tue un autre
 class Robot():
     def __init__(self, nom, sante=100, competence="Simple Robot nul"):
         self.nom = nom
@@ -17,6 +19,7 @@ class Robot():
     def sePresenter(self):
         print("Bonjour ! Je suis " + self.nom + " et je suis un " + self.competence)
 
+#Un robot attaque un robot adverse aléatoirement, suivant son niveau ou si il fait un coup critique les dégats infliger changent | Il gagne de l'expérience.
     def attaquer(self, robot):
         if self.sante > 0:
             degats = self.tauxAttaque * self.lvl
@@ -34,6 +37,7 @@ class Robot():
             #print("Il reste " + str(robot.sante) + " points de vie à " + robot.nom)
             #time.sleep(1)
 
+    #Un robot gagne de l'expérience jusqu'à 10, il monte ensuite de niveau, la monté de niveau augmentera ses dégats.
     def gagnerExperience(self, montant):
         if self.lvl == 1:
             self.experience += montant
@@ -41,7 +45,7 @@ class Robot():
                 self.lvl += 1
                 self.experience = self.experience - 10
 
-
+#Une équipe possède un nom et une liste de robot
 class Equipe():
     def __init__(self, nom, robots):
         self.nom = nom
@@ -52,6 +56,7 @@ class Equipe():
     def ajouterRobot(self, robot):
         self.equipe.append(robot)
 
+#Selectionne un robot aléatoire dans une équipe (le robot doit être vivant)
     def randRobot(self):
         equipevivante = []
 
@@ -64,6 +69,7 @@ class Equipe():
         else:
             return None
 
+#Méthode qui retourne les robots vivants dans une équipe
     def membreVivant(self):
         membreVivant = []
         for robot in self.equipe:
@@ -72,6 +78,7 @@ class Equipe():
 
         return membreVivant
 
+#Affiche les points de vie des robots d'une équipe
     def afficherHp(self):
         print("\nSanté pour l'équipe : " + self.nom)
         for robot in self.equipe:
@@ -80,7 +87,7 @@ class Equipe():
             else:
                 print("Le robot " + robot.nom + " (lvl " + str(robot.lvl) + ") a : " + str(robot.sante) + " HP.")
 
-
+#Déroulement d'une partie en tour par tour | Chaque équipe possède 4 robots
 class Partie():
     def __init__(self, test = False):
         if test:
@@ -93,6 +100,7 @@ class Partie():
             nomEquipe2 = input("Joueur 2: choisir le nom de ton équipe :")
             self.equipe2 = self.creerEquipe(nomEquipe2)
 
+#En début de partie chaque joueur devra constituer son équipe, choisir quatres robots de la classe qu"il veut et lui donner un nom.
     def creerEquipe(self, nom):
         equipe = []
         for i in range(4):
@@ -106,12 +114,8 @@ class Partie():
 
         return Equipe(nom, equipe)
 
-    def creerEquipe2(self, nom):
-        if nom == "Bleu":
-            return Equipe(nom, [RobotSoldat("Rambo"), RobotSoldat("Huutai"), RobotMedecin("Docteur House")])
-        else:
-            return Equipe(nom, [RobotSoldat("Stravinsky"), RobotSoldat("Ramuz"), RobotMedecin("Olivier Mauvais")])
-
+#La partie commence, elle s'arrête quand une équipe a plus de robots vivant. Le joueur qui commence est décider aléatoirement.
+#Une fois qu'un robot a effectuer une action, c'est à l'équipe adverse de jouer.
     def jouerTour(self):
         commencer = random.randint(0, 1)
         while len(self.equipe1.membreVivant()) > 0 and len(self.equipe2.membreVivant()) > 0:
@@ -131,6 +135,7 @@ class Partie():
 
         return self.afficherVictoire()
 
+#Action que doit effectuer un robot suivant sa classe.
     def tour(self, equipeAllie, equipeEnemie, index):
         if(equipeAllie[index].__class__.__name__ == "RobotHybride"):
             equipeAllie[index].action(equipeAllie, equipeEnemie)
@@ -151,7 +156,7 @@ class Partie():
             #self.equipe2.afficherHp()
             return 2
 
-
+#Robot médecin, il soigne ses alliés la majeur partie du temps. Il attaque quand toute son équipe est full hp et quand le reste de son equipe est mort.
 class RobotMedecin(Robot):
     def __init__(self, nom, sante=90, competence="soigner"):
         Robot.__init__(self, nom, sante, competence)
@@ -187,12 +192,15 @@ class RobotMedecin(Robot):
                 #time.sleep(1)
 
 
+#Robot qui attaque plus fort d'autre robot
 class RobotSoldat(Robot):
     def __init__(self, nom, sante=100, competence="attaquer"):
         Robot.__init__(self, nom, sante, competence)
         self.tauxAttaque = 25
 
 
+
+#Robot qui attaque et soigne | Il attaque à 50% et il soigne à 50%
 class RobotHybride(RobotMedecin):
     def __init__(self, nom, sante=100, competence="hybride"):
         RobotMedecin.__init__(self, nom, sante, competence)
