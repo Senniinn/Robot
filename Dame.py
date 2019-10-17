@@ -44,25 +44,38 @@ class Dame:
     def clear(self):
         self.canvas.delete("all")
 
-    def move(self, x, y):
+    def move(self, pion, x, y):
+        print(pion)
         newx = x * 60
         newy = y * 60
         if self.flag == 0:
-            self.canvas.tag_raise(self.joueurBlanc[0][0])
-            self.canvas.itemconfigure(self.joueurBlanc[0][0], fill="green")
-            self.canvas.coords(self.joueurBlanc[0][0], newx + 5, newy + 5, newx + 55, newy + 55)
-            print(self.joueurBlanc[0])
-            self.joueurBlanc[0] = [self.joueurBlanc[0], newx, newy]
+            self.canvas.tag_raise(pion[0])
+            self.canvas.itemconfigure(pion[0], fill="green")
+            self.canvas.coords(pion[0], newx + 5, newy + 5, newx + 55, newy + 55)
+            self.joueurBlanc[0] = [pion[0], newx, newy]
         else:
-            self.canvas.tag_raise(self.joueurNoir[0][0])
-            self.canvas.itemconfigure(self.joueurNoir[0][0], fill="pink")
-            self.canvas.coords(self.joueurNoir[0][0], newx + 5, newy + 5, newx + 55, newy + 55)
-            self.joueurNoir[0] = [self.joueurNoir[0], newx, newy]
+            self.canvas.tag_raise(pion[0])
+            self.canvas.itemconfigure(pion[0], fill="pink")
+            self.canvas.coords(pion[0], newx + 5, newy + 5, newx + 55, newy + 55)
+            self.joueurNoir[0] = [pion[0], newx, newy]
         self.changeTurn()
-        print(self.joueurBlanc[0])
 
     def pointeur(self, event):
-        self.move(int(event.x / 60), int(event.y / 60))
+        x = int(event.x / 60) * 60
+        y = int(event.y / 60) * 60
+        stop = False
+        pionSelectionne = None
+        for i in range(self.nbPion):
+            if self.flag == 0 and self.joueurBlanc[i][1] == x and self.joueurBlanc[i][2] == y:
+                pionSelectionne = self.joueurBlanc[i]
+                stop = True
+            elif self.flag == 1 and self.joueurNoir[i][1] == x and self.joueurNoir[i][2] == y:
+                pionSelectionne = self.joueurNoir[i]
+                stop = True
+        if stop and pionSelectionne is not None:
+            self.move(pionSelectionne, int(event.x / 60), int(event.y / 60))
+        else:
+            showinfo("Alrte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
 
     def changeTurn(self):
         if self.flag == 0:
@@ -87,8 +100,6 @@ d.creerDamier()
 effacer = Button(fen1, text='Effacer', command=d.clear)
 effacer.pack()
 creer = Button(fen1, text='Créer damier', command=d.creerDamier)
-creer.pack()
-creer = Button(fen1, text='Créer damier', command=d.move)
 creer.pack()
 
 bou1 = Button(fen1, text='Quitter', command=fen1.quit)

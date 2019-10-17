@@ -1,5 +1,6 @@
 from Pion import Pion
 
+
 class Reine(Pion):
     def __init__(self, x, y, color, canvas):
         self.color = color

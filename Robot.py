@@ -33,7 +33,8 @@ class Robot():
         else:
             self.gagnerExperience(2)
 
-        print("\nL'attage de " + self.nom + " a infliger " + str(degats) + " points de dégats")
+        print("\nL'attage de " + self.nom + "(niveau :" + str(self.lvl) + ") a infliger " + str(
+            degats) + " points de dégats")
         print("Il reste " + str(robot.sante) + " points de vie à " + robot.nom)
         time.sleep(0.5)
 
@@ -44,6 +45,92 @@ class Robot():
             if self.experience >= 10:
                 self.lvl += 1
                 self.experience = self.experience - 10
+
+
+# Robot médecin, il soigne ses alliés la majeur partie du temps. Il attaque quand toute son équipe est full hp et quand le reste de son equipe est mort.
+class RobotMedecin(Robot):
+    def __init__(self, nom, sante=90, competence="medecin"):
+        Robot.__init__(self, nom, sante, competence)
+        self.tauxSoin = 45
+        self.maxHp = 90
+
+    def soigner(self, equipeAllie, equipeEnemie):
+        robot_min_hp = None
+        min_hp = 100
+        for robot in equipeAllie:
+            if 0 < robot.sante < robot.maxHp and robot.sante <= min_hp:
+                min_hp = robot.sante
+                robot_min_hp = robot
+
+        if robot_min_hp is not None:
+            if self.tauxCritique > random.random():
+                robot_min_hp.sante += self.tauxSoin * 2 * self.lvl
+            else:
+                robot_min_hp.sante += self.tauxSoin * self.lvl
+
+            if robot_min_hp.sante > robot_min_hp.maxHp:
+                robot_min_hp.sante = robot_min_hp.maxHp
+            if self.sante < self.maxHp:
+                self.sante -= 10
+
+            self.gagnerExperience(5)
+            print("\n" + self.nom + " a soigné " + robot_min_hp.nom)
+            print(robot_min_hp.nom + " a regagné " + str(robot_min_hp.sante - min_hp) + " points de vie")
+            time.sleep(0.5)
+        else:
+            self.attaquer(equipeEnemie.randRobot())
+
+
+# Robot qui attaque plus fort d'autre robot
+class RobotSoldat(Robot):
+    def __init__(self, nom, sante=100, competence="soldat"):
+        Robot.__init__(self, nom, sante, competence)
+        self.tauxAttaque = 25
+
+
+# Robot qui attaque et soigne | Il attaque à 50% et il soigne à 50%
+class RobotHybride(RobotMedecin):
+    def __init__(self, nom, sante=100, competence="hybride"):
+        RobotMedecin.__init__(self, nom, sante, competence)
+        self.maxHp = 100
+        self.tauxAttaque = 25
+        self.tauxSoin = 20
+
+    def action(self, equipeAllie, equipeEnemie):
+        rand = random.randint(0, 1)
+        if rand == 0:
+            self.attaquer(equipeEnemie.randRobot())
+        else:
+            self.soigner(equipeAllie, equipeEnemie)
+
+
+# Robot qui attaque normalement tant qu'il n'a pas chargé son attaque spéciale
+# sinon il lance un sort qui attaque tous les ennemies
+class RobotMage(Robot):
+    def __init__(self, nom, sante=70, competence="mage"):
+        Robot.__init__(self, nom, sante, competence)
+        self.maxHp = 70
+        self.energie = 0
+        self.tauxAttaque = 15
+        self.degatsSorts = 25
+
+    def gagnerEnergie(self):
+        self.energie += 5 * self.lvl
+
+    def lancerSort(self, equipeEnemie):
+        print(self.nom + " lance son attaque spéciale\n")
+        for robot in equipeEnemie.membreVivant():
+            degats = self.degatsSorts * self.lvl
+            if (self.tauxCritique > random.random()):
+                degats *= 2
+            robot.sante -= degats
+            if robot.sante < 0:
+                print(robot.nom + " est mort")
+                robot.sante = 0
+            else:
+                print(robot.nom + " a perdu " + str(degats) + " points de vie")
+        self.energie = 0
+        time.sleep(0.5)
 
 
 # Une équipe possède un nom et une liste de robot
@@ -169,91 +256,6 @@ class Partie():
             self.equipe2.afficherHp()
             return 2
 
-
-# Robot médecin, il soigne ses alliés la majeur partie du temps. Il attaque quand toute son équipe est full hp et quand le reste de son equipe est mort.
-class RobotMedecin(Robot):
-    def __init__(self, nom, sante=90, competence="medecin"):
-        Robot.__init__(self, nom, sante, competence)
-        self.tauxSoin = 45
-        self.maxHp = 90
-
-    def soigner(self, equipeAllie, equipeEnemie):
-        robot_min_hp = None
-        min_hp = 100
-        for robot in equipeAllie:
-            if 0 < robot.sante < robot.maxHp and robot.sante <= min_hp:
-                min_hp = robot.sante
-                robot_min_hp = robot
-
-        if robot_min_hp is not None:
-            if self.tauxCritique > random.random():
-                robot_min_hp.sante += self.tauxSoin * 2 * self.lvl
-            else:
-                robot_min_hp.sante += self.tauxSoin * self.lvl
-
-            if robot_min_hp.sante > robot_min_hp.maxHp:
-                robot_min_hp.sante = robot_min_hp.maxHp
-            if self.sante < self.maxHp:
-                self.sante -= 10
-
-            self.gagnerExperience(5)
-            print("\n" + self.nom + " a soigné " + robot_min_hp.nom)
-            print(robot_min_hp.nom + " a regagné " + str(robot_min_hp.sante - min_hp) + " points de vie")
-            time.sleep(0.5)
-        else:
-            self.attaquer(equipeEnemie.randRobot())
-
-
-# Robot qui attaque plus fort d'autre robot
-class RobotSoldat(Robot):
-    def __init__(self, nom, sante=100, competence="soldat"):
-        Robot.__init__(self, nom, sante, competence)
-        self.tauxAttaque = 25
-
-
-# Robot qui attaque et soigne | Il attaque à 50% et il soigne à 50%
-class RobotHybride(RobotMedecin):
-    def __init__(self, nom, sante=100, competence="hybride"):
-        RobotMedecin.__init__(self, nom, sante, competence)
-        self.maxHp = 100
-        self.tauxAttaque = 25
-        self.tauxSoin = 20
-
-    def action(self, equipeAllie, equipeEnemie):
-        rand = random.randint(0, 1)
-        if rand == 0:
-            self.attaquer(equipeEnemie.randRobot())
-        else:
-            self.soigner(equipeAllie, equipeEnemie)
-
-
-# Robot qui attaque normalement tant qu'il n'a pas chargé son attaque spéciale
-# sinon il lance un sort qui attaque tous les ennemies
-class RobotMage(Robot):
-    def __init__(self, nom, sante=70, competence="mage"):
-        Robot.__init__(self, nom, sante, competence)
-        self.maxHp = 70
-        self.energie = 0
-        self.tauxAttaque = 15
-        self.degatsSorts = 25
-
-    def gagnerEnergie(self):
-        self.energie += 5 * self.lvl
-
-    def lancerSort(self, equipeEnemie):
-        print(self.nom + " lance son attaque spéciale\n")
-        for robot in equipeEnemie.membreVivant():
-            degats = self.degatsSorts * self.lvl
-            if (self.tauxCritique > random.random()):
-                degats *= 2
-            robot.sante -= degats
-            if robot.sante < 0:
-                print(robot.nom + " est mort")
-                robot.sante = 0
-            else:
-                print(robot.nom + " a perdu " + str(degats) + " points de vie")
-        self.energie = 0
-        time.sleep(0.5)
 
 for i in range(1):
     p = Partie()
