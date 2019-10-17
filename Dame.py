@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter.messagebox import *
 
+from Pion import Pion
+
 
 class Dame:
     def __init__(self, canevas):
@@ -14,6 +16,7 @@ class Dame:
         color = "white"
         x = 0
         y = 0
+        self.flag = 0
         self.joueurBlanc = []
         self.joueurNoir = []
         for i in range(10):
@@ -21,13 +24,13 @@ class Dame:
                 self.canvas.create_rectangle(x, y, x + 60, y + 60, fill=color)
                 if color == "brown":
                     if len(self.joueurNoir) < self.nbPion:
-                        oval = self.canvas.create_oval(x + 5, y + 5, x + 55, y + 55, fill="black")
-                        self.joueurNoir.append([oval, x, y])
+                        pion = Pion(x, y, "black", self.canvas)
+                        self.joueurNoir.append(pion)
                     elif i == 4 or i == 5:
                         pass
                     elif len(self.joueurBlanc) < self.nbPion:
-                        oval = self.canvas.create_oval(x + 5, y + 5, x + 55, y + 55, fill="white")
-                        self.joueurBlanc.append([oval, x, y])
+                        pion = Pion(x, y, "white", self.canvas)
+                        self.joueurBlanc.append(pion)
 
                 color = self.changeCaseColor(color)
                 x += 60
@@ -44,21 +47,23 @@ class Dame:
     def clear(self):
         self.canvas.delete("all")
 
-    def move(self, pion, x, y):
-        print(pion)
-        newx = x * 60
-        newy = y * 60
-        if self.flag == 0:
-            self.canvas.tag_raise(pion[0])
-            self.canvas.itemconfigure(pion[0], fill="green")
-            self.canvas.coords(pion[0], newx + 5, newy + 5, newx + 55, newy + 55)
-            self.joueurBlanc[0] = [pion[0], newx, newy]
-        else:
-            self.canvas.tag_raise(pion[0])
-            self.canvas.itemconfigure(pion[0], fill="pink")
-            self.canvas.coords(pion[0], newx + 5, newy + 5, newx + 55, newy + 55)
-            self.joueurNoir[0] = [pion[0], newx, newy]
-        self.changeTurn()
+    # def move(self, pion):
+    #     newx = pion.x
+    #     newy = pion.y
+    #     if self.flag == 0:
+    #         self.canvas.tag_raise(pion.oval)
+    #         self.canvas.itemconfigure(pion.oval, fill="green")
+    #         self.canvas.coords(pion.oval, newx + 5, newy + 5, newx + 55, newy + 55)
+    #         pion.x = newx
+    #         pion.y = newy
+    #         print(pion.oval, newx, pion.x, newy, pion.y)
+    #     else:
+    #         self.canvas.tag_raise(pion.oval)
+    #         self.canvas.itemconfigure(pion.oval, fill="pink")
+    #         self.canvas.coords(pion.oval, newx + 5, newy + 5, newx + 55, newy + 55)
+    #         pion.x = newx
+    #         pion.y = newy
+    #     self.changeTurn()
 
     def pointeur(self, event):
         x = int(event.x / 60) * 60
@@ -66,14 +71,14 @@ class Dame:
         stop = False
         pionSelectionne = None
         for i in range(self.nbPion):
-            if self.flag == 0 and self.joueurBlanc[i][1] == x and self.joueurBlanc[i][2] == y:
+            if self.flag == 0 and self.joueurBlanc[i].x == x and self.joueurBlanc[i].y == y:
                 pionSelectionne = self.joueurBlanc[i]
                 stop = True
-            elif self.flag == 1 and self.joueurNoir[i][1] == x and self.joueurNoir[i][2] == y:
+            elif self.flag == 1 and self.joueurNoir[i].x == x and self.joueurNoir[i].y == y:
                 pionSelectionne = self.joueurNoir[i]
                 stop = True
         if stop and pionSelectionne is not None:
-            self.move(pionSelectionne, int(event.x / 60), int(event.y / 60))
+            self.move(pionSelectionne)
         else:
             showinfo("Alrte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
 
