@@ -69,17 +69,16 @@ class Dame:
         x = int(event.x / 60) * 60
         y = int(event.y / 60) * 60
         stop = False
-        pionSelectionne = None
         for i in range(self.nbPion):
             if self.flag == 0 and self.joueurBlanc[i].x == x and self.joueurBlanc[i].y == y:
-                pionSelectionne = self.joueurBlanc[i]
+                self.joueurBlanc[i].possibilites(self.joueurBlanc, self.joueurNoir, self.joueurBlanc[i])
                 stop = True
+                break
             elif self.flag == 1 and self.joueurNoir[i].x == x and self.joueurNoir[i].y == y:
-                pionSelectionne = self.joueurNoir[i]
+                self.joueurBlanc[i].possibilites(self.joueurBlanc, self.joueurNoir, self.joueurNoir[i])
                 stop = True
-        if stop and pionSelectionne is not None:
-            self.move(pionSelectionne)
-        else:
+                break
+        if not stop:
             showinfo("Alrte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
 
     def changeTurn(self):
