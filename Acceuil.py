@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter.messagebox import *
+
 from Dame import Dame
 
 
@@ -9,7 +9,7 @@ def lauchGame():
     can1.pack(side=LEFT)
     d = Dame(can1)
     d.creerDamier()
-    root.quit
+    root.quit()
     fen1.mainloop()
     fen1.destroy()
 

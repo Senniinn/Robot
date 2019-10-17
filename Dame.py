@@ -11,6 +11,7 @@ class Dame:
         self.joueurNoir = []
         self.nbPion = 20
         self.flag = 0
+        self.possibilities = []
 
     def creerDamier(self):
         color = "white"
@@ -66,20 +67,28 @@ class Dame:
     #     self.changeTurn()
 
     def pointeur(self, event):
+        for p in self.possibilities:
+            self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="brown")
         x = int(event.x / 60) * 60
         y = int(event.y / 60) * 60
         stop = False
         for i in range(self.nbPion):
             if self.flag == 0 and self.joueurBlanc[i].x == x and self.joueurBlanc[i].y == y:
-                self.joueurBlanc[i].possibilites(self.joueurBlanc, self.joueurNoir, self.joueurBlanc[i])
+                self.possibilities = self.joueurBlanc[i].possibilities(self.joueurBlanc, self.joueurNoir,
+                                                                       self.joueurBlanc[i])
+                for p in self.possibilities:
+                    self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
                 stop = True
                 break
-            elif self.flag == 1 and self.joueurNoir[i].x == x and self.joueurNoir[i].y == y:
-                self.joueurBlanc[i].possibilites(self.joueurBlanc, self.joueurNoir, self.joueurNoir[i])
+            if self.flag == 1 and self.joueurNoir[i].x == x and self.joueurNoir[i].y == y:
+                self.possibilities = self.joueurNoir[i].possibilities(self.joueurBlanc, self.joueurNoir,
+                                                                      self.joueurNoir[i])
+                for p in self.possibilities:
+                    self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
                 stop = True
                 break
         if not stop:
-            showinfo("Alrte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
+            showinfo("Alerte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
 
     def changeTurn(self):
         if self.flag == 0:
