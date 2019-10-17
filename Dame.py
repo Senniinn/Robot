@@ -12,6 +12,7 @@ class Dame:
         self.nbPion = 20
         self.flag = 0
         self.possibilities = []
+        self.selected = None
 
     def creerDamier(self):
         color = "white"
@@ -67,13 +68,21 @@ class Dame:
     #     self.changeTurn()
 
     def pointeur(self, event):
-        for p in self.possibilities:
-            self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="brown")
+        self.deletePossibilities()
         x = int(event.x / 60) * 60
         y = int(event.y / 60) * 60
+
+        for p in self.possibilities:
+            if p[0] == x and p[1] == y:
+                self.deletePossibilities()
+                self.possibilities = []
+                self.selected.move(x, y)
+                self.changeTurn()
+
         stop = False
         for i in range(self.nbPion):
             if self.flag == 0 and self.joueurBlanc[i].x == x and self.joueurBlanc[i].y == y:
+                self.selected = self.joueurBlanc[i]
                 self.possibilities = self.joueurBlanc[i].possibilities(self.joueurBlanc, self.joueurNoir,
                                                                        self.joueurBlanc[i])
                 for p in self.possibilities:
@@ -83,6 +92,7 @@ class Dame:
             if self.flag == 1 and self.joueurNoir[i].x == x and self.joueurNoir[i].y == y:
                 self.possibilities = self.joueurNoir[i].possibilities(self.joueurBlanc, self.joueurNoir,
                                                                       self.joueurNoir[i])
+                self.selected = self.joueurNoir[i]
                 for p in self.possibilities:
                     self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
                 stop = True
@@ -96,6 +106,9 @@ class Dame:
         else:
             self.flag = 0
 
+    def deletePossibilities(self):
+        for p in self.possibilities:
+            self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="brown")
 
 # ------ Programme principal ------
 

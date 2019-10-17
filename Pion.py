@@ -7,8 +7,13 @@ class Pion():
         self.oval = self.canvas.create_oval(self.x + 5, self.y + 5, self.x + 55, self.y + 55, fill=self.color)
 
     def possibilities(self, pionsBlancs, pionsNoirs, pion):
-        possiblity1 = [pion.x+60, pion.y-60]
-        possiblity2 = [pion.x-60, pion.y-60]
+        currentColor = self.canvas.itemcget(self.oval, 'fill')
+        if currentColor == "white":
+            possiblity1 = [pion.x + 60, pion.y - 60]
+            possiblity2 = [pion.x - 60, pion.y - 60]
+        else:
+            possiblity1 = [pion.x - 60, pion.y + 60]
+            possiblity2 = [pion.x + 60, pion.y + 60]
         validPoss1 = True
         validPoss2 = True
         possiblities = []
@@ -38,8 +43,5 @@ class Pion():
     def move(self, x, y):
         self.x = x
         self.y = y
-        self.can.coords(self.oval, self.x + 5, self.y + 5, self.x + 55, self.y + 55)
-
-
-
-
+        self.canvas.tag_raise(self.oval)
+        self.canvas.coords(self.oval, self.x + 5, self.y + 5, self.x + 55, self.y + 55)
