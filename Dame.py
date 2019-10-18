@@ -106,7 +106,11 @@ class Dame:
         else:
             self.flag = 0
 
-
+    def eat(self, pion):
+        if pion.canvas.itemcget(self.oval, 'fill') == 'black':
+            self.joueurNoir.pop(pion)
+        else:
+            self.joueurBlanc.pop(pion)
 
 
     def deletePossibilities(self):
