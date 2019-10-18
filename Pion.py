@@ -23,45 +23,59 @@ class Pion():
         validPoss1a = False
         validPoss2a = False
         possiblities = []
+        pionDown = None
 
        #Possibilité déplacement blancs
         for pionsBlanc in pionsBlancs:
-            if (possiblity1[0] >= 0):
-                if (possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y):
+            if possiblity1[0] >= 0:
+                if possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y:
                     validPoss1 = False
-                    validPoss1a = True
-                if (possiblity2[0] <= 540):
-                    if (possiblity2[0] == pionsBlanc.x and possiblity2[1] == pionsBlanc.y):
+                    if pion.color != pionsBlanc.color:
+                        validPoss1a = True
+                    pionDown = pionsBlanc
+                if possiblity2[0] <= 540:
+                    if possiblity2[0] == pionsBlanc.x and possiblity2[1] == pionsBlanc.y:
                         validPoss2 = False
-                        validPoss2a = True
+                        if pion.color != pionsBlanc.color:
+                            validPoss2a = True
+                        pionDown = pionsBlanc
+
         # Possibilité manger blancs
         if validPoss1a:
             for pionsBlanc in pionsBlancs:
-                if (possiblity1a[0] >= 0 and possiblity1a[0] == pionsBlanc.x and possiblity1a[1] == pionsBlanc.y):
+                if possiblity1a[0] >= 0 and possiblity1a[0] == pionsBlanc.x and possiblity1a[1] == pionsBlanc.y:
                     validPoss1a = False
+                    pionDown = None
         if validPoss2a:
             for pionsBlanc in pionsBlancs:
-                if (possiblity2a[0] <= 540 and possiblity2a[0] == pionsBlanc.x and possiblity2a[1] == pionsBlanc.y):
+                if possiblity2a[0] <= 540 and possiblity2a[0] == pionsBlanc.x and possiblity2a[1] == pionsBlanc.y:
                     validPoss2a = False
+                    pionDown = None
         # Possibilité déplacement noirs
         for pionsNoir in pionsNoirs:
-            if (possiblity1[0] >= 0):
-                if (possiblity1[0] == pionsNoir.x and possiblity1[1] == pionsNoir.y):
+            if possiblity1[0] >= 0:
+                if possiblity1[0] == pionsNoir.x and possiblity1[1] == pionsNoir.y:
                     validPoss1 = False
-                    validPoss1a = True
-            if (possiblity2[0] <= 540):
-                if (possiblity2[0] == pionsNoir.x and possiblity2[1] == pionsNoir.y):
+                    if pion.color != pionsNoir.color:
+                        validPoss1a = True
+                    pionDown = pionsNoir
+            if possiblity2[0] <= 540:
+                if possiblity2[0] == pionsNoir.x and possiblity2[1] == pionsNoir.y:
                     validPoss2 = False
-                    validPoss2a = True
+                    if pion.color != pionsNoir.color:
+                        validPoss2a = True
+                    pionDown = pionsNoir
         # Possibilité manger noirs
         if validPoss1a:
             for pionsNoir in pionsNoirs:
-                if (possiblity1a[0] >= 0 and possiblity1a[0] == pionsNoir.x and possiblity1a[1] == pionsNoir.y):
+                if possiblity1a[0] >= 0 and possiblity1a[0] == pionsNoir.x and possiblity1a[1] == pionsNoir.y:
                     validPoss1a = False
+                    pionDown = None
         if validPoss2a:
             for pionsNoir in pionsNoirs:
-                if (possiblity2[0] <= 540 and possiblity2a[0] == pionsNoir.x and possiblity2a[1] == pionsNoir.y):
+                if possiblity2[0] <= 540 and possiblity2a[0] == pionsNoir.x and possiblity2a[1] == pionsNoir.y:
                     validPoss2a = False
+                    pionDown = None
 
         if validPoss1:
             possiblities.append(possiblity1)
@@ -72,7 +86,7 @@ class Pion():
         if validPoss2a:
             possiblities.append(possiblity2a)
 
-        return possiblities
+        return [possiblities, pionDown]
 
     def move(self, x, y):
         self.x = x
