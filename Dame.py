@@ -106,6 +106,9 @@ class Dame:
         else:
             self.flag = 0
 
+
+
+
     def deletePossibilities(self):
         for p in self.possibilities:
             self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="brown")

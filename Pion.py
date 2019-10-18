@@ -20,32 +20,32 @@ class Pion():
             possiblity2a = [pion.x + 120, pion.y + 120]
         validPoss1 = True
         validPoss2 = True
-        validPoss1a = True
-        validPoss2a = True
+        validPoss1a = False
+        validPoss2a = False
         possiblities = []
 
         for pionsBlanc in pionsBlancs:
             if (possiblity1[0] >= 0):
                 if (possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y):
                     validPoss1 = False
-                    if (possiblity1a[0] >= 0 and possiblity1a[0] == pionsBlanc.x and possiblity1a[1] == pionsBlanc.y):
-                        validPoss1a = False
+                    if (possiblity1a[0] >= 0 and possiblity1a[0] != pionsBlanc.x and possiblity1a[1] != pionsBlanc.y):
+                        validPoss1a = True
             if (possiblity2[0] <= 540):
                 if (possiblity2[0] == pionsBlanc.x and possiblity2[1] == pionsBlanc.y):
                     validPoss2 = False
-                    if (possiblity2a[0] <= 540 and possiblity2a[0] == pionsBlanc.x and possiblity2a[1] == pionsBlanc.y):
-                        validPoss2a = False
+                    if (possiblity2a[0] <= 540 and possiblity2a[0] != pionsBlanc.x and possiblity2a[1] != pionsBlanc.y):
+                        validPoss2a = True
         for pionsNoir in pionsNoirs:
             if (possiblity1[0] >= 0):
                 if (possiblity1[0] == pionsNoir.x and possiblity1[1] == pionsNoir.y):
                     validPoss1 = False
-                    if (possiblity1a[0] >= 0 and possiblity1a[0] == pionsNoir.x and possiblity1a[1] == pionsNoir.y):
-                        validPoss1a = False
+                    if (possiblity1a[0] >= 0 and possiblity1a[0] != pionsNoir.x and possiblity1a[1] != pionsNoir.y):
+                        validPoss1a = True
             if (possiblity2[0] <= 540):
                 if (possiblity2[0] == pionsNoir.x and possiblity2[1] == pionsNoir.y):
                     validPoss2 = False
-                    if (possiblity2[0] <= 540 and possiblity2a[0] == pionsNoir.x and possiblity2a[1] == pionsNoir.y):
-                        validPoss2a = False
+                    if (possiblity2[0] <= 540 and possiblity2a[0] != pionsNoir.x and possiblity2a[1] != pionsNoir.y):
+                        validPoss2a = True
 
         if validPoss1:
             possiblities.append(possiblity1)
@@ -63,3 +63,4 @@ class Pion():
         self.y = y
         self.canvas.tag_raise(self.oval)
         self.canvas.coords(self.oval, self.x + 5, self.y + 5, self.x + 55, self.y + 55)
+
