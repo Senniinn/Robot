@@ -98,7 +98,8 @@ class Dame:
                 stop = True
                 break
         if not stop:
-            showinfo("Alerte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
+            #showinfo("Alerte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
+            pass
 
     def changeTurn(self):
         if self.flag == 0:
@@ -107,7 +108,7 @@ class Dame:
             self.flag = 0
 
     def eat(self, pion):
-        if pion.canvas.itemcget(self.oval, 'fill') == 'black':
+        if pion.canvas.itemcget(pion, 'fill') == 'black':
             self.joueurNoir.pop(pion)
         else:
             self.joueurBlanc.pop(pion)

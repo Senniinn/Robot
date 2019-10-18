@@ -24,28 +24,44 @@ class Pion():
         validPoss2a = False
         possiblities = []
 
+       #Possibilité déplacement blancs
         for pionsBlanc in pionsBlancs:
             if (possiblity1[0] >= 0):
                 if (possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y):
                     validPoss1 = False
-                    if (possiblity1a[0] >= 0 and possiblity1a[0] != pionsBlanc.x and possiblity1a[1] != pionsBlanc.y):
-                        validPoss1a = True
-            if (possiblity2[0] <= 540):
-                if (possiblity2[0] == pionsBlanc.x and possiblity2[1] == pionsBlanc.y):
-                    validPoss2 = False
-                    if (possiblity2a[0] <= 540 and possiblity2a[0] != pionsBlanc.x and possiblity2a[1] != pionsBlanc.y):
+                    validPoss1a = True
+                if (possiblity2[0] <= 540):
+                    if (possiblity2[0] == pionsBlanc.x and possiblity2[1] == pionsBlanc.y):
+                        validPoss2 = False
                         validPoss2a = True
+        # Possibilité manger blancs
+        if validPoss1a:
+            for pionsBlanc in pionsBlancs:
+                if (possiblity1a[0] >= 0 and possiblity1a[0] == pionsBlanc.x and possiblity1a[1] == pionsBlanc.y):
+                    validPoss1a = False
+        if validPoss2a:
+            for pionsBlanc in pionsBlancs:
+                if (possiblity2a[0] <= 540 and possiblity2a[0] == pionsBlanc.x and possiblity2a[1] == pionsBlanc.y):
+                    validPoss2a = False
+        # Possibilité déplacement noirs
         for pionsNoir in pionsNoirs:
             if (possiblity1[0] >= 0):
                 if (possiblity1[0] == pionsNoir.x and possiblity1[1] == pionsNoir.y):
                     validPoss1 = False
-                    if (possiblity1a[0] >= 0 and possiblity1a[0] != pionsNoir.x and possiblity1a[1] != pionsNoir.y):
-                        validPoss1a = True
+                    validPoss1a = True
             if (possiblity2[0] <= 540):
                 if (possiblity2[0] == pionsNoir.x and possiblity2[1] == pionsNoir.y):
                     validPoss2 = False
-                    if (possiblity2[0] <= 540 and possiblity2a[0] != pionsNoir.x and possiblity2a[1] != pionsNoir.y):
-                        validPoss2a = True
+                    validPoss2a = True
+        # Possibilité manger noirs
+        if validPoss1a:
+            for pionsNoir in pionsNoirs:
+                if (possiblity1a[0] >= 0 and possiblity1a[0] == pionsNoir.x and possiblity1a[1] == pionsNoir.y):
+                    validPoss1a = False
+        if validPoss2a:
+            for pionsNoir in pionsNoirs:
+                if (possiblity2[0] <= 540 and possiblity2a[0] == pionsNoir.x and possiblity2a[1] == pionsNoir.y):
+                    validPoss2a = False
 
         if validPoss1:
             possiblities.append(possiblity1)
