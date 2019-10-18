@@ -11,6 +11,7 @@ def lauchGame():
     can1.pack(side=LEFT)
     d = Dame(can1)
     d.creerDamier()
+    can1.bind("<Button-1>", d.pointeur)
     fen1.mainloop()
     fen1.destroy()
 def rules():
