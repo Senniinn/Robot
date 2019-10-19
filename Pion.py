@@ -33,8 +33,7 @@ class Pion():
 
        # Checks des pions blanc       qu'on soit un pion noir ou blanc
         for pionsBlanc in pionsBlancs:
-            if possiblity1[0] >= 0 and possiblity1[0] == pionsBlanc.x and possiblity1[
-                1] == pionsBlanc.y:  # Check si un pion blanc est a droite
+            if possiblity1[0] >= 0 and possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y:  # Check si un pion blanc est a droite
                 validPoss1 = False
                 if pion.color != pionsBlanc.color:  # Si on est un pion noir
                     validPoss1a = True  # Possibilité de manger vers la droite passe a vrai  ==> Voir plus bas
