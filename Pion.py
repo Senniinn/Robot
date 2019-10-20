@@ -102,31 +102,31 @@ class Pion():
 
         if validPoss1a:  # La possibilité est vraie, elle deviendra fausse a la fin si, on trouve un pion sur cette case
             for pionsBlanc in pionsBlancs:
-                if possiblity1a[0] <= 540 and possiblity1a[0] == pionsBlanc.x and possiblity1a[1] == pionsBlanc.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity1a[0] <= 540 and possiblity1a[0] == pionsBlanc.x and possiblity1a[1] == pionsBlanc.y:
                     validPoss1a = False
             for pionsNoir in pionsNoirs:  # Même raisonnement pour un pion noir
-                if possiblity1a[0] <= 540 and possiblity1a[0] == pionsNoir.x and possiblity1a[1] == pionsNoir.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity1a[0] <= 540 and possiblity1a[0] == pionsNoir.x and possiblity1a[1] == pionsNoir.y:
                     validPoss1a = False
         if validPoss2a:  # Même raisonnement mais pour la possibilité deux, à savoir le déplacement vers la gauche
             for pionsBlanc in pionsBlancs:
-                if possiblity2a[0] >= 0 and possiblity2a[0] == pionsBlanc.x and possiblity2a[1] == pionsBlanc.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity2a[0] >= 0 and possiblity2a[0] == pionsBlanc.x and possiblity2a[1] == pionsBlanc.y:
                     validPoss2a = False
             for pionsNoir in pionsNoirs:
-                if possiblity2a[0] >= 0 and possiblity2a[0] == pionsNoir.x and possiblity2a[1] == pionsNoir.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity2a[0] >= 0 and possiblity2a[0] == pionsNoir.x and possiblity2a[1] == pionsNoir.y:
                     validPoss2a = False
         if validPoss3a:
             for pionsBlanc in pionsBlancs:
-                if possiblity3a[0] <= 540 and possiblity3a[0] == pionsBlanc.x and possiblity3a[1] == pionsBlanc.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity3a[0] <= 540 and possiblity3a[0] == pionsBlanc.x and possiblity3a[1] == pionsBlanc.y:
                     validPoss3a = False
             for pionsNoir in pionsNoirs:
-                if possiblity3a[0] <= 540 and possiblity3a[0] == pionsNoir.x and possiblity3a[1] == pionsNoir.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity3a[0] <= 540 and possiblity3a[0] == pionsNoir.x and possiblity3a[1] == pionsNoir.y:
                     validPoss3a = False
         if validPoss4a:
             for pionsBlanc in pionsBlancs:
-                if possiblity4a[0] >= 0 and possiblity4a[0] == pionsBlanc.x and possiblity4a[1] == pionsBlanc.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity4a[0] >= 0 and possiblity4a[0] == pionsBlanc.x and possiblity4a[1] == pionsBlanc.y:
                     validPoss4a = False
             for pionsNoir in pionsNoirs:
-                if possiblity4a[0] >= 0 and possiblity4a[0] == pionsNoir.x and possiblity4a[1] == pionsNoir.y:
+                if 0 <= possiblity1a[1] <= 540 and possiblity4a[0] >= 0 and possiblity4a[0] == pionsNoir.x and possiblity4a[1] == pionsNoir.y:
                     validPoss4a = False
 
 
