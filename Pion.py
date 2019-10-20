@@ -43,11 +43,16 @@ class Pion():
         possiblities = []  # Tableau qui va contenir les différentes possibilité d'un pion
         pionDown = None
 
-
-
+        # print("pos1",possiblity1)
+        # print("pos2",possiblity2)
+        # print("pos3",possiblity3)
+        # print("pos4",possiblity4)
+        # print("pos1a",possiblity1a)
+        # print("pos2a",possiblity2a)
+        # print("pos3a",possiblity3a)
+        # print("pos4a",possiblity4a)
 
         ##########  CHECK DES DEPLACEMENTS ##########
-
         # Checks des pions blanc       qu'on soit un pion noir ou blanc
         for pionsBlanc in pionsBlancs:
             if possiblity1[0] <= 540 and possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y:  # Check si un pion blanc est a droite

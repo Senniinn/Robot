@@ -15,6 +15,9 @@ class Dame:
         self.selected = None
         self.eatPion = None
         self.winner = None
+        self.currentPlayerLabel = None
+        self.pionNoirLabel = None
+        self.pionBlancLabel = None
 
     def creerDamier(self):
         color = "white"
@@ -41,12 +44,23 @@ class Dame:
             color = self.changeCaseColor(color)
             x = 0
             y += 60
+            self.currentPlayer(self.currentPlayerLabel)
+            self.setPions()
 
     def changeCaseColor(self, color):
         if color == "white":
             return "brown"
         else:
             return "white"
+
+    def setCurrentPlayerLabel(self, label):
+        self.currentPlayerLabel = label
+
+    def currentPlayer(self, label):
+        if self.flag == 0:
+            label.config(text="Joueur 1")
+        else:
+            label.config(text="Joueur 2")
 
     def clear(self):
         self.canvas.delete("all")
@@ -79,7 +93,8 @@ class Dame:
                                 self.possibilities = result[0]
                                 self.eatPion = result[1]
                                 for p in self.possibilities:
-                                    self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
+                                    if self.selected.y - 120 == p[1] or self.selected.y + 120 == p[1]:
+                                        self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
                     if not replay:
                         self.selected.move(x, y)
                         self.selected = None
@@ -116,6 +131,7 @@ class Dame:
             self.flag = 1
         else:
             self.flag = 0
+        self.currentPlayer(self.currentPlayerLabel)
 
     def eat(self, pion):
         if pion.color == 'black':
@@ -137,11 +153,20 @@ class Dame:
             if len(self.joueurNoir) == 0:
                 self.winner = "blanc"
                 showinfo('Victoire', 'Le joueur noir a gagné')
+        self.setPions()
 
     def deletePossibilities(self):
         for p in self.possibilities:
             self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="brown")
         self.possibilities = []
+
+    def setPionLabels(self, pionBlanc, pionNoir):
+        self.pionBlancLabel = pionBlanc
+        self.pionNoirLabel = pionNoir
+
+    def setPions(self):
+        self.pionBlancLabel.config(text="Joueur 1 : {0}".format(len(self.joueurBlanc)))
+        self.pionNoirLabel.config(text="Joueur 2 : {0}".format(len(self.joueurNoir)))
 
 
 # ------ Programme principal ------
@@ -153,15 +178,25 @@ fen1 = Tk()
 can1 = Canvas(fen1, bg='dark grey', height=600, width=600)
 can1.pack(side=LEFT)
 
+player = Label(fen1)
+player.pack()
+pionRestant = Label(fen1, text="Pions restants")
+pionRestant.pack()
+pionBlanc = Label(fen1)
+pionBlanc.pack()
+pionNoir = Label(fen1)
+pionNoir.pack()
+
 # Creation du damier
 d = Dame(can1)
+d.setCurrentPlayerLabel(player)
+d.setPionLabels(pionBlanc, pionNoir)
 d.creerDamier()
 
 effacer = Button(fen1, text='Effacer', command=d.clear)
 effacer.pack()
 creer = Button(fen1, text='Créer damier', command=d.creerDamier)
 creer.pack()
-
 bou1 = Button(fen1, text='Quitter', command=fen1.quit)
 bou1.pack(side=BOTTOM)
 
