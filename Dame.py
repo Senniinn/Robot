@@ -56,19 +56,36 @@ class Dame:
             x = int(event.x / 60) * 60
             y = int(event.y / 60) * 60
             endTurn = False
-
+            replay = False
             for p in self.possibilities:
                 if p[0] == x and p[1] == y:
                     self.deletePossibilities()
                     if (self.selected.y - 120 == y) or (self.selected.y + 120 == y):
+                        for pion in self.eatPion:
+                            if pion.y - 60 == y and pion.x - 60 == x:
+                                self.eatPion = pion
+                            if pion.y - 60 == y and pion.x + 60 == x:
+                                self.eatPion = pion
+                            if pion.y + 60 == y and pion.x + 60 == x:
+                                self.eatPion = pion
+                            if pion.y + 60 == y and pion.x - 60 == x:
+                                self.eatPion = pion
+                        self.selected.move(x, y)
                         if isinstance(self.eatPion, Pion):
                             self.eat(self.eatPion)
-                    self.selected.move(x, y)
-                    self.selected = None
-                    self.eatPion = None
-                    self.changeTurn()
-                    endTurn = True
-
+                            result = (self.selected.possibilities(self.joueurBlanc, self.joueurNoir, self.selected))
+                            if result[0] and result[1]:
+                                replay = True
+                                self.possibilities = result[0]
+                                self.eatPion = result[1]
+                                for p in self.possibilities:
+                                    self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
+                    if not replay:
+                        self.selected.move(x, y)
+                        self.selected = None
+                        self.eatPion = None
+                        self.changeTurn()
+                        endTurn = True
             self.deletePossibilities()
             if not endTurn:
                 stop = False
