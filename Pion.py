@@ -116,17 +116,17 @@ class Pion():
                     validPoss2a = False
         if validPoss3a:
             for pionsBlanc in pionsBlancs:
-                if possiblity3a[0] <= 0 and possiblity3a[0] == pionsBlanc.x and possiblity3a[1] == pionsBlanc.y:
+                if possiblity3a[0] <= 540 and possiblity3a[0] == pionsBlanc.x and possiblity3a[1] == pionsBlanc.y:
                     validPoss3a = False
             for pionsNoir in pionsNoirs:
-                if possiblity3a[0] <= 0 and possiblity3a[0] == pionsNoir.x and possiblity3a[1] == pionsNoir.y:
+                if possiblity3a[0] <= 540 and possiblity3a[0] == pionsNoir.x and possiblity3a[1] == pionsNoir.y:
                     validPoss3a = False
         if validPoss4a:
             for pionsBlanc in pionsBlancs:
-                if possiblity4a[0] <= 540 and possiblity4a[0] == pionsBlanc.x and possiblity4a[1] == pionsBlanc.y:
+                if possiblity4a[0] >= 0 and possiblity4a[0] == pionsBlanc.x and possiblity4a[1] == pionsBlanc.y:
                     validPoss4a = False
             for pionsNoir in pionsNoirs:
-                if possiblity4a[0] <= 540 and possiblity4a[0] == pionsNoir.x and possiblity4a[1] == pionsNoir.y:
+                if possiblity4a[0] >= 0 and possiblity4a[0] == pionsNoir.x and possiblity4a[1] == pionsNoir.y:
                     validPoss4a = False
 
 
