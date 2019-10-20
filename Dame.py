@@ -1,4 +1,3 @@
-from tkinter import *
 from tkinter.messagebox import *
 
 from Pion import Pion
@@ -100,9 +99,8 @@ class Dame:
                             result = (self.selected.possibilities(self.joueurBlanc, self.joueurNoir, self.selected))
                             if result[0] and result[1]:  # Vérifie la possibilité de rejouer
                                 for p2 in result[0]:
-                                    print(p2, self.selected.y)
-                                    if self.selected.y - p2[1] == 120 or self.selected.y - p2[
-                                        1] == -120:  # Si il y a une possibilité de remanger
+                                    # Si il y a une possibilité de remanger
+                                    if self.selected.y - p2[1] == 120 or self.selected.y - p2[1] == -120:
                                         replay = True
                                         self.possibilities = result[0]
                                         self.eatPion = result[1]
@@ -123,7 +121,6 @@ class Dame:
                     self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
                 if not stop:
                     showinfo("Alerte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
-            # print(len(self.joueurNoir), len(self.joueurBlanc))
         else:
             showinfo('Victoire', 'Le joueur {0} a déjà gagné'.format(self.winner))
 
@@ -163,11 +160,11 @@ class Dame:
         if pion.color == 'black':
             if len(self.joueurNoir) == 0:
                 self.winner = "noir"
-                showinfo('Victoire', 'Le joueur blanc a gagné')
+                showinfo('Victoire', 'Le joueur noir a gagné')
         if pion.color == 'white':
             if len(self.joueurNoir) == 0:
                 self.winner = "blanc"
-                showinfo('Victoire', 'Le joueur noir a gagné')
+                showinfo('Victoire', 'Le joueur blanc a gagné')
         self.setPions()
 
     # Supprimer les possibilitées
@@ -185,39 +182,3 @@ class Dame:
     def setPions(self):
         self.pionBlancLabel.config(text="Joueur 1 : {0}".format(len(self.joueurBlanc)))
         self.pionNoirLabel.config(text="Joueur 2 : {0}".format(len(self.joueurNoir)))
-
-
-# ------ Programme principal ------
-
-# Création du widget principal ("maître") :
-fen1 = Tk()
-
-# Création des widgets "esclaves" :
-can1 = Canvas(fen1, bg='dark grey', height=600, width=600)
-can1.pack(side=LEFT)
-
-player = Label(fen1)
-player.pack()
-pionRestant = Label(fen1, text="Pions restants")
-pionRestant.pack()
-pionBlanc = Label(fen1)
-pionBlanc.pack()
-pionNoir = Label(fen1)
-pionNoir.pack()
-
-# Creation du damier
-d = Dame(can1)
-d.setCurrentPlayerLabel(player)
-d.setPionLabels(pionBlanc, pionNoir)
-d.creerDamier()
-
-effacer = Button(fen1, text='Effacer', command=d.clear)
-effacer.pack()
-creer = Button(fen1, text='Créer damier', command=d.creerDamier)
-creer.pack()
-bou1 = Button(fen1, text='Quitter', command=fen1.quit)
-bou1.pack(side=BOTTOM)
-
-can1.bind("<Button-1>", d.pointeur)
-fen1.mainloop()  # démarrage du réceptionnaire d'événement
-fen1.destroy()  # destruction (fermeture) de la fenêtre
