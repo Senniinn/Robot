@@ -52,14 +52,25 @@ class Pion():
         # print("pos3a",possiblity3a)
         # print("pos4a",possiblity4a)
 
+        # Fonction à répéter qui n'a pas marcher
+        def fonctionRep(possibility, possibilityA, pionColor, validPoss, validPossA, pionD):
+            if possibility[0] <= 540 and possibility[0] == pionColor.x and possibility[1] == pionColor.y:  # Check si un pion blanc est a droite
+                validPoss = False
+                if 0 <= possibilityA[1] <= 540 and pion.color != pion.color:  # Si on est un pion noir
+                    validPossA = True  # Possibilité de manger vers la droite passe a vrai  ==> Voir plus bas
+                    pionD = self.setPionDown(pionD, pionColor)  # Le pion manger sera donc un pion blanc
+
+                return possibility, pionColor, validPoss, validPossA, pionD
+
+
         ##########  CHECK DES DEPLACEMENTS ##########
         # Checks des pions blanc       qu'on soit un pion noir ou blanc
         for pionsBlanc in pionsBlancs:
-            if possiblity1[0] <= 540 and possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y:  # Check si un pion blanc est a droite
+            if possiblity1[0] >= 0 and possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y:  # Check si un pion blanc est a gauche
                 validPoss1 = False
-                if 0 <= possiblity1a[1] <= 540 and pion.color != pionsBlanc.color:  # Si on est un pion noir
-                    validPoss1a = True  # Possibilité de manger vers la droite passe a vrai  ==> Voir plus bas
-                    pionDown = self.setPionDown(pionDown, pionsBlanc)  # Le pion manger sera donc un pion blanc
+                if 0 <= possiblity1a[1] <= 540 and pion.color != pionsBlanc.color:
+                    validPoss1a = True
+                    pionDown = self.setPionDown(pionDown, pionsBlanc)
 
             if possiblity2[0] >= 0 and possiblity2[0] == pionsBlanc.x and possiblity2[1] == pionsBlanc.y:  # Check si un pion blanc est a gauche
                 validPoss2 = False
@@ -100,6 +111,14 @@ class Pion():
                 if 0 <= possiblity4a[1] <= 540 and pion.color != pionsNoir.color:
                     validPoss4a = True
                     pionDown = self.setPionDown(pionDown, pionsNoir)
+
+
+        #Fonction à répéter qui n'a pas marcher
+        def rep(validPossA, PionsColors, possibilityA):
+            for pionColor in PionsColors:
+                if possibilityA[0] == pionColor.x and possibilityA[1] == pionColor.y:
+                    validPossA = False
+                return validPossA
 
 
 
