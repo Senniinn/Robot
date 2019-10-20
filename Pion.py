@@ -59,23 +59,23 @@ class Pion():
         for pionsBlanc in pionsBlancs:
             if possiblity1[0] >= 0 and possiblity1[0] == pionsBlanc.x and possiblity1[1] == pionsBlanc.y:  # Check si un pion blanc est a gauche
                 validPoss1 = False
-                if 0 <= possiblity1a[1] <= 540 and pion.color != pionsBlanc.color:
+                if 0 <= possiblity1a[0] <= 540 and 0 <= possiblity1a[1] <= 540 and pion.color != pionsBlanc.color:
                     validPoss1a = True
                     pionDown = self.setPionDown(pionDown, pionsBlanc)
 
             if possiblity2[0] >= 0 and possiblity2[0] == pionsBlanc.x and possiblity2[1] == pionsBlanc.y:  # Check si un pion blanc est a gauche
                 validPoss2 = False
-                if 0 <= possiblity2a[1] <= 540 and pion.color != pionsBlanc.color:
+                if 0 <= possiblity2a[0] <= 540 and 0 <= possiblity2a[1] <= 540 and pion.color != pionsBlanc.color:
                     validPoss2a = True
                     pionDown = self.setPionDown(pionDown, pionsBlanc)
 
             if possiblity3[0] <= 540 and possiblity3[0] == pionsBlanc.x and possiblity3[1] == pionsBlanc.y:  # Check si un pion blanc est derriere a droite
-                if 0 <= possiblity3a[1] <= 540 and pion.color != pionsBlanc.color:
+                if 0 <= possiblity3a[0] <= 540 and 0 <= possiblity3a[1] <= 540 and pion.color != pionsBlanc.color:
                     validPoss3a = True
                     pionDown = self.setPionDown(pionDown, pionsBlanc)
 
             if possiblity4[0] >= 0 and possiblity4[0] == pionsBlanc.x and possiblity4[1] == pionsBlanc.y:  # Check si un pion blanc est derriere a gauche
-                if 0 <= possiblity4a[1] <= 540 and pion.color != pionsBlanc.color:
+                if 0 <= possiblity4a[0] <= 540 and 0 <= possiblity4a[1] <= 540 and pion.color != pionsBlanc.color:
                     validPoss4a = True
                     pionDown = self.setPionDown(pionDown, pionsBlanc)
 
@@ -83,23 +83,23 @@ class Pion():
         for pionsNoir in pionsNoirs:
             if possiblity1[0] <= 540 and possiblity1[0] == pionsNoir.x and possiblity1[1] == pionsNoir.y:
                 validPoss1 = False
-                if 0 <= possiblity1a[1] <= 540 and pion.color != pionsNoir.color:  # Si on est un blanc
+                if 0 <= possiblity1a[0] <= 540 and 0 <= possiblity1a[1] <= 540 and pion.color != pionsNoir.color:  # Si on est un blanc
                     validPoss1a = True
                     pionDown = self.setPionDown(pionDown, pionsNoir)
 
             if possiblity2[0] >= 0 and possiblity2[0] == pionsNoir.x and possiblity2[1] == pionsNoir.y:
                 validPoss2 = False
-                if 0 <= possiblity2a[1] <= 540 and pion.color != pionsNoir.color:  # Si on est un blanc
+                if 0 <= possiblity2a[0] <= 540 and 0 <= possiblity2a[1] <= 540 and pion.color != pionsNoir.color:  # Si on est un blanc
                     validPoss2a = True
                     pionDown = self.setPionDown(pionDown, pionsNoir)
 
             if possiblity3[0] <= 540 and possiblity3[0] == pionsNoir.x and possiblity3[1] == pionsNoir.y:
-                if 0 <= possiblity3a[1] <= 540 and pion.color != pionsNoir.color:
+                if 0 <= possiblity3a[0] <= 540 and 0 <= possiblity3a[1] <= 540 and pion.color != pionsNoir.color:
                     validPoss3a = True
                     pionDown = self.setPionDown(pionDown, pionsNoir)
 
             if possiblity4[0] >= 0 and possiblity4[0] == pionsNoir.x and possiblity4[1] == pionsNoir.y:
-                if 0 <= possiblity4a[1] <= 540 and pion.color != pionsNoir.color:
+                if 0 <= possiblity4a[0] <= 540 and 0 <= possiblity4a[1] <= 540 and pion.color != pionsNoir.color:
                     validPoss4a = True
                     pionDown = self.setPionDown(pionDown, pionsNoir)
 
