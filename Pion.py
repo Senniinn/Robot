@@ -43,15 +43,6 @@ class Pion():
         possiblities = []  # Tableau qui va contenir les différentes possibilité d'un pion
         pionDown = None
 
-        # print("pos1",possiblity1)
-        # print("pos2",possiblity2)
-        # print("pos3",possiblity3)
-        # print("pos4",possiblity4)
-        # print("pos1a",possiblity1a)
-        # print("pos2a",possiblity2a)
-        # print("pos3a",possiblity3a)
-        # print("pos4a",possiblity4a)
-
         # Fonction à répéter qui n'a pas marcher
         def fonctionRep(possibility, possibilityA, pionColor, validPoss, validPossA, pionD):
             if possibility[0] <= 540 and possibility[0] == pionColor.x and possibility[1] == pionColor.y:  # Check si un pion blanc est a droite
@@ -153,7 +144,6 @@ class Pion():
                 if possiblity4a[0] == pionsNoir.x and possiblity4a[1] == pionsNoir.y:
                     validPoss4a = False
 
-
         # Passage des possibilités au tableau.
         if validPoss1:
             possiblities.append(possiblity1)
@@ -168,8 +158,6 @@ class Pion():
         if validPoss4a:
             possiblities.append(possiblity4a)
 
-
-
         return [possiblities, pionDown]  # Retour des différentes possibilité et du pion manger.
 
     def setPionDown(self, pionDown, pion):
@@ -178,6 +166,7 @@ class Pion():
         else:
             pionDown.append(pion)
         return pionDown
+
     def move(self, x, y):
         self.x = x
         self.y = y
