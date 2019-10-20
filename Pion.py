@@ -130,10 +130,6 @@ class Pion():
                     validPoss4a = False
 
 
-
-
-
-
         # Passage des possibilités au tableau.
         if validPoss1:
             possiblities.append(possiblity1)

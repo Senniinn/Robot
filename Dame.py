@@ -14,6 +14,7 @@ class Dame:
         self.possibilities = []
         self.selected = None
         self.eatPion = None
+        self.winner = None
 
     def creerDamier(self):
         color = "white"
@@ -50,70 +51,48 @@ class Dame:
     def clear(self):
         self.canvas.delete("all")
 
-    # def move(self, pion):
-    #     newx = pion.x
-    #     newy = pion.y
-    #     if self.flag == 0:
-    #         self.canvas.tag_raise(pion.oval)
-    #         self.canvas.itemconfigure(pion.oval, fill="green")
-    #         self.canvas.coords(pion.oval, newx + 5, newy + 5, newx + 55, newy + 55)
-    #         pion.x = newx
-    #         pion.y = newy
-    #         print(pion.oval, newx, pion.x, newy, pion.y)
-    #     else:
-    #         self.canvas.tag_raise(pion.oval)
-    #         self.canvas.itemconfigure(pion.oval, fill="pink")
-    #         self.canvas.coords(pion.oval, newx + 5, newy + 5, newx + 55, newy + 55)
-    #         pion.x = newx
-    #         pion.y = newy
-    #     self.changeTurn()
-
     def pointeur(self, event):
-        x = int(event.x / 60) * 60
-        y = int(event.y / 60) * 60
-        endTurn = False
-        for p in self.possibilities:
-            if p[0] == x and p[1] == y:
-                self.deletePossibilities()
-                if (self.selected.y - 120 == y and self.selected.color == "white") or (
-                        self.selected.y + 120 == y and self.selected.color == "black"):
-                    if isinstance(self.eatPion, Pion):
-                        self.eat(self.eatPion)
-                self.selected.move(x, y)
-                self.selected = None
-                self.eatPion = None
-                self.changeTurn()
-                endTurn = True
-        self.deletePossibilities()
-        if not endTurn:
-            stop = False
-            if self.flag == 0:
-                for i in range(len(self.joueurBlanc)):
-                    if self.joueurBlanc[i].x == x and self.joueurBlanc[i].y == y:
-                        result = self.getPossibilities(self.joueurBlanc[i])
-                        if result[1] is not None:
-                            print(result[1].color, result[1].x, result[1].y)
-                        self.possibilities = result[0]
-                        self.eatPion = result[1]
-                        stop = True
-            if self.flag == 1:
-                for i in range(len(self.joueurNoir)):
-                    if self.joueurNoir[i].x == x and self.joueurNoir[i].y == y:
-                        result = self.getPossibilities(self.joueurNoir[i])
-                        self.possibilities = result[0]
-                        if result[1] is not None:
-                            print(result[1].color, result[1].x, result[1].y)
-                        self.eatPion = result[1]
-                        stop = True
-            for p in self.possibilities:
-                self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
-            if not stop:
-                showinfo("Alerte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
-        # print(len(self.joueurNoir), len(self.joueurBlanc))
+        if self.winner is None:
+            x = int(event.x / 60) * 60
+            y = int(event.y / 60) * 60
+            endTurn = False
 
-    def getPossibilities(self, pion):
-        self.selected = pion
-        return pion.possibilities(self.joueurBlanc, self.joueurNoir, pion)
+            for p in self.possibilities:
+                if p[0] == x and p[1] == y:
+                    self.deletePossibilities()
+                    if (self.selected.y - 120 == y) or (self.selected.y + 120 == y):
+                        if isinstance(self.eatPion, Pion):
+                            self.eat(self.eatPion)
+                    self.selected.move(x, y)
+                    self.selected = None
+                    self.eatPion = None
+                    self.changeTurn()
+                    endTurn = True
+
+            self.deletePossibilities()
+            if not endTurn:
+                stop = False
+                if self.flag == 0:
+                    stop = self.getPossibilities(self.joueurBlanc, x, y)
+                if self.flag == 1:
+                    stop = self.getPossibilities(self.joueurNoir, x, y)
+                for p in self.possibilities:
+                    self.canvas.create_rectangle(p[0], p[1], p[0] + 60, p[1] + 60, fill="gold")
+                if not stop:
+                    showinfo("Alerte", 'Ce n\'est pas votre pion ou il n\'y a pas de pion sur la case')
+            # print(len(self.joueurNoir), len(self.joueurBlanc))
+        else:
+            showinfo('Victoire', 'Le joueur {0} a déjà gagné'.format(self.winner))
+
+    def getPossibilities(self, pions, x, y):
+        for i in range(len(pions)):
+            if pions[i].x == x and pions[i].y == y:
+                self.selected = pions[i]
+                result = self.selected.possibilities(self.joueurBlanc, self.joueurNoir, self.selected)
+                self.possibilities = result[0]
+                self.eatPion = result[1]
+                return True
+        return False
 
     def changeTurn(self):
         if self.flag == 0:
@@ -130,6 +109,17 @@ class Dame:
             index = self.joueurBlanc.index(pion)
             self.joueurBlanc.pop(index)
             self.canvas.delete(pion.oval)
+        self.victory(pion)
+
+    def victory(self, pion):
+        if pion.color == 'black':
+            if len(self.joueurNoir) == 0:
+                self.winner = "noir"
+                showinfo('Victoire', 'Le joueur blanc a gagné')
+        if pion.color == 'white':
+            if len(self.joueurNoir) == 0:
+                self.winner = "blanc"
+                showinfo('Victoire', 'Le joueur noir a gagné')
 
     def deletePossibilities(self):
         for p in self.possibilities:
